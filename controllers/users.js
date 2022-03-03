@@ -35,7 +35,6 @@ const usersPost = async (req, res) => {
   await user.save();
 
   res.json({
-    message: "post API - Controller",
     user,
   });
 };

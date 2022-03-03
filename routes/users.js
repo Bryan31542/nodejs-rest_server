@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
+const Role = require("../models/role");
 
 const {
   usersGet,
@@ -21,7 +22,12 @@ router.post(
     check("password", "La contraseña debe tener mas de 6 letras").isLength({
       min: 6,
     }),
-    // check("role", "No es un rol permitido").isIn(["USER_ROLE", "ADMIN_ROLE"]),
+    check("role").custom(async (role = "") => {
+      const roleExist = await Role.findOne({ role });
+      if (!roleExist) {
+        throw new Error(`El rol ${role} no esta registado de la base de datos`);
+      }
+    }),
     validateFields,
   ],
   usersPost

@@ -20,7 +20,7 @@ const UserSchema = Schema({
   role: {
     type: String,
     required: true,
-    emun: ["USER_ROLE", "ADMIN_ROLE"],
+    enum: ["USER_ROLE", "ADMIN_ROLE"],
   },
   status: {
     type: Boolean,
@@ -32,4 +32,4 @@ const UserSchema = Schema({
   },
 });
 
-module.export = model("User", UserSchema);
+module.exports = model("User", UserSchema);

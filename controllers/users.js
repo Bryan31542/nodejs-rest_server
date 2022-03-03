@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
 const usersGet = async (req = request, res = response) => {
-  const { limit = 5, skip } = req.query;
+  const { limit = 5, skip = 0 } = req.query;
   const query = { status: true };
 
   const [total, users] = await Promise.all([
@@ -55,9 +55,14 @@ const usersPatch = (req, res = response) => {
   });
 };
 
-const usersDelete = (req, res = response) => {
+const usersDelete = async (req, res = response) => {
+  const { id } = req.params;
+
+  // Delete in db
+  const userDB = await User.findByIdAndUpdate(id, { status: false });
+
   res.json({
-    msg: "delete API - Controller",
+    userDB,
   });
 };
 

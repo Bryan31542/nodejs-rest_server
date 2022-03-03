@@ -14,13 +14,14 @@ const usersGet = (req = request, res = response) => {
   });
 };
 
-const usersPost = (req, res) => {
+const usersPost = async (req, res) => {
   const body = req.body;
   const user = new User(body);
 
+  await user.save();
+
   res.json({
     message: "post API - Controller",
-    body,
     user,
   });
 };

@@ -21,7 +21,7 @@ router.post(
     check("password", "La contraseña debe tener mas de 6 letras").isLength({
       min: 6,
     }),
-    check("role", "No es un rol permitido").isIn(["USER_ROLE", "ADMIN_ROLE"]),
+    // check("role", "No es un rol permitido").isIn(["USER_ROLE", "ADMIN_ROLE"]),
     validateFields,
   ],
   usersPost

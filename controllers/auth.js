@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../models/user");
 const { generateJWT } = require("../helpers/generate-jwt");
+const { googleVerify } = require("../helpers/google-verify");
+const { json } = require("express/lib/response");
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
@@ -44,6 +46,26 @@ const login = async (req, res = response) => {
   }
 };
 
+const googleSignIn = async (req, res = response) => {
+  const { id_token } = req.body;
+
+  try {
+
+    const { name, picture, email } = await googleVerify(id_token);
+
+    res.json({
+      msg: "todo gucci",
+      id_token,
+    });
+  } catch (error) {
+    json.status(400).json({
+      ok: false,
+      msg: "Hubo un error, hable con el administrador, el token no se pudo validar",
+    });
+  }
+};
+
 module.exports = {
   login,
+  googleSignIn,
 };

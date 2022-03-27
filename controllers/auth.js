@@ -50,12 +50,35 @@ const googleSignIn = async (req, res = response) => {
   const { id_token } = req.body;
 
   try {
-
     const { name, picture, email } = await googleVerify(id_token);
 
+    let user = await User.findOne({ email }); // check if user exist
+
+    if (!user) {
+      // create new user
+      const data = {
+        name,
+        email,
+        password: ":p",
+        picture,
+        role: "USER_ROLE",
+        google: true,
+      };
+      user = new User(data);
+      await user.save();
+    }
+
+    // if user in db
+    if (!user.status) {
+      return res.status(401).json({ msg: "Usuario inactivo" });
+    }
+
+    // generate token
+    const token = await generateJWT(user.id);
+
     res.json({
-      msg: "todo gucci",
-      id_token,
+      user,
+      token,
     });
   } catch (error) {
     json.status(400).json({

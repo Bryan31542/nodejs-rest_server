@@ -21,6 +21,12 @@ const getCategories = async (req, res = response) => {
 };
 
 // Get category - populate {}
+const getCategory = async (req, res = response) => {
+  const { id } = req.params;
+  const category = await Category.findById(id).populate("user", "name");
+
+  res.json(category);
+};
 
 const createCategory = async (req, res = response) => {
   const name = req.body.name.toUpperCase();
@@ -54,5 +60,6 @@ const createCategory = async (req, res = response) => {
 
 module.exports = {
   getCategories,
+  getCategory,
   createCategory,
 };

@@ -55,6 +55,19 @@ const createCategory = async (req, res = response) => {
 };
 
 // Update category
+const updateCategory = async (req, res = response) => {
+  const { id } = req.params;
+  const { status, user, ...data } = req.body;
+
+  data.name = data.name.toUpperCase();
+  data.user = req.user._id;
+
+  const category = await Category.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+
+  res.json(category);
+};
 
 //  Delete category - status:false
 
@@ -62,4 +75,5 @@ module.exports = {
   getCategories,
   getCategory,
   createCategory,
+  updateCategory,
 };

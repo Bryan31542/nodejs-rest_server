@@ -6,6 +6,7 @@ const {
   createCategory,
   getCategories,
   getCategory,
+  updateCategory,
 } = require("../controllers/categories");
 const { categoryExistByID } = require("../helpers/db-validators");
 
@@ -37,9 +38,16 @@ router.post(
 );
 
 // Actualizar categoria - privado - cualquier persona con un token valido
-router.put("/:id", (req, res) => {
-  res.json("put");
-});
+router.put(
+  "/:id",
+  [
+    validateJWT,
+    check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("id").custom(categoryExistByID),
+    validateFields,
+  ],
+  updateCategory
+);
 
 // Eliminar categoria - admin
 router.delete("/:id", (req, res) => {

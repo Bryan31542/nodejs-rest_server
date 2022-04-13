@@ -70,10 +70,24 @@ const updateCategory = async (req, res = response) => {
 };
 
 //  Delete category - status:false
+const deleteCategory = async (req, res = response) => {
+  const { id } = req.params;
+
+  const categoryDB = await Category.findByIdAndUpdate(
+    id,
+    { status: false },
+    {
+      new: true,
+    }
+  );
+
+  res.json(categoryDB);
+};
 
 module.exports = {
   getCategories,
   getCategory,
   createCategory,
   updateCategory,
+  deleteCategory,
 };

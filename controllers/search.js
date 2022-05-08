@@ -22,6 +22,41 @@ const searchUsers = async (term = "", res = response) => {
   return res.json({ results: users });
 };
 
+const searchProducts = async (term = "", res = response) => {
+  const isMongoID = ObjectId.isValid(term); // true
+
+  if (isMongoID) {
+    const product = await Product.findById(term).populate("category", "name");
+    return res.json({ results: product ? [product] : [] });
+  }
+
+  const regex = new RegExp(term, "i");
+
+  const products = await Product.find({
+    $or: [{ name: regex }],
+    $and: [{ status: true }],
+  }).populate("category", "name");
+
+  return res.json({ results: products });
+};
+
+const searchCategories = async (term = "", res = response) => {
+  const isMongoID = ObjectId.isValid(term); // true
+
+  if (isMongoID) {
+    const category = await Category.findById(term);
+    return res.json({ results: category ? [category] : [] });
+  }
+
+  const regex = new RegExp(term, "i");
+
+  const categories = await Category.find({
+    $or: [{ name: regex, status: true }],
+  });
+
+  return res.json({ results: categories });
+};
+
 const search = (req, res = response) => {
   const { collection, term } = req.params;
 
@@ -36,8 +71,10 @@ const search = (req, res = response) => {
       searchUsers(term, res);
       break;
     case "products":
+      searchProducts(term, res);
       break;
     case "categories":
+      searchCategories(term, res);
       break;
 
     default:

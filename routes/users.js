@@ -30,7 +30,6 @@ router.post(
     check("password", "La contraseña debe tener mas de 6 letras").isLength({
       min: 6,
     }),
-    check("role").custom(isRoleValid),
     validateFields,
   ],
   usersPost

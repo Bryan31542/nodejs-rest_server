@@ -7,10 +7,10 @@ const loadFile = async (req, res = response) => {
   }
 
   // Images only
-  const pathComplete = await uploadFile(req.files);
+  const name = await uploadFile(req.files);
 
   res.json({
-    path: pathComplete,
+    name,
   });
 };
 

@@ -22,7 +22,7 @@ const uploadFile = (
       if (err) {
         reject(err);
       }
-      resolve(uploadPath);
+      resolve(tempName);
     });
   });
 };

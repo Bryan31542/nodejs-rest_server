@@ -9,16 +9,25 @@ const loadFile = (req, res = response) => {
   }
 
   const { file } = req.files;
+  const nameCut = file.name.split(".");
+  const extension = nameCut[nameCut.length - 1];
 
-  const uploadPath = path.join(__dirname, "../uploads/", file.name);
+  // Validate extension
+  const validExtensions = ["jpg", "jpeg", "png", "gif"];
 
-  file.mv(uploadPath, (err) => {
-    if (err) {
-      return res.status(500).json({ err });
-    }
+  if (!validExtensions.includes(extension)) {
+    return res.status(400).send({ msg: `Invalid file extension ${extension}` });
+  }
 
-    res.json({ msg: "File uploaded to " + uploadPath });
-  });
+  //   const uploadPath = path.join(__dirname, "../uploads/", file.name);
+
+  //   file.mv(uploadPath, (err) => {
+  //     if (err) {
+  //       return res.status(500).json({ err });
+  //     }
+
+  //     res.json({ msg: "File uploaded to " + uploadPath });
+  //   });
 };
 
 module.exports = {

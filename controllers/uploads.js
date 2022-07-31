@@ -1,4 +1,5 @@
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const loadFile = (req, res = response) => {
   console.log(req.files);
@@ -19,15 +20,16 @@ const loadFile = (req, res = response) => {
     return res.status(400).send({ msg: `Invalid file extension ${extension}` });
   }
 
-  //   const uploadPath = path.join(__dirname, "../uploads/", file.name);
+  const tempName = `${uuidv4()}.${extension}`;
+  const uploadPath = path.join(__dirname, "../uploads/", tempName);
 
-  //   file.mv(uploadPath, (err) => {
-  //     if (err) {
-  //       return res.status(500).json({ err });
-  //     }
+  file.mv(uploadPath, (err) => {
+    if (err) {
+      return res.status(500).json({ err });
+    }
 
-  //     res.json({ msg: "File uploaded to " + uploadPath });
-  //   });
+    res.json({ msg: "File uploaded to " + uploadPath });
+  });
 };
 
 module.exports = {

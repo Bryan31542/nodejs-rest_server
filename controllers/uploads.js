@@ -42,7 +42,12 @@ const updateImage = async (req, res = response) => {
   // Cleaning previous image
   if (model.image) {
     // delete server image
-    const pathImage = path.join(__dirname, "../uploads", collection, model.image);
+    const pathImage = path.join(
+      __dirname,
+      "../uploads",
+      collection,
+      model.image
+    );
 
     // if file exists, delete it
     if (fs.existsSync(pathImage)) {
@@ -58,7 +63,51 @@ const updateImage = async (req, res = response) => {
   res.json(model);
 };
 
+const showImage = async (req, res = response) => {
+  const { id, collection } = req.params;
+
+  let model;
+
+  switch (collection) {
+    case "users":
+      model = await User.findById(id);
+
+      if (!model) {
+        return res.status(400).json({ msg: "El usuario no existe" });
+      }
+      break;
+    case "products":
+      model = await Product.findById(id);
+
+      if (!model) {
+        return res.status(400).json({ msg: "El producto no existe" });
+      }
+      break;
+    default:
+      return res.status(500).json({ msg: "Collection not allowed" });
+  }
+
+  // Cleaning previous image
+  if (model.image) {
+    // delete server image
+    const pathImage = path.join(
+      __dirname,
+      "../uploads",
+      collection,
+      model.image
+    );
+
+    // if file exists, show it
+    if (fs.existsSync(pathImage)) {
+      return res.sendFile(pathImage);
+    }
+  }
+
+  res.json({ msg: "No image" });
+};
+
 module.exports = {
   loadFile,
   updateImage,
+  showImage,
 };

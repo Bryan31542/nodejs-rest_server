@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const { response } = require("express");
 const { uploadFile } = require("../helpers");
 const { User, Product } = require("../models");
@@ -35,6 +37,17 @@ const updateImage = async (req, res = response) => {
       break;
     default:
       return res.status(500).json({ msg: "Collection not allowed" });
+  }
+
+  // Cleaning previous image
+  if (model.image) {
+    // delete server image
+    const pathImage = path.join(__dirname, "../uploads", collection, model.image);
+
+    // if file exists, delete it
+    if (fs.existsSync(pathImage)) {
+      fs.unlinkSync(pathImage);
+    }
   }
 
   const name = await uploadFile(req.files, undefined, collection);

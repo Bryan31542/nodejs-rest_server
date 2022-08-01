@@ -103,7 +103,8 @@ const showImage = async (req, res = response) => {
     }
   }
 
-  res.json({ msg: "No image" });
+  const pathNotFound = path.join(__dirname, "../assets", "no-image.jpg");
+  return res.sendFile(pathNotFound);
 };
 
 module.exports = {

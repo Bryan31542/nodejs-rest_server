@@ -138,18 +138,7 @@ const showImage = async (req, res = response) => {
 
   // Cleaning previous image
   if (model.image) {
-    // delete server image
-    const pathImage = path.join(
-      __dirname,
-      "../uploads",
-      collection,
-      model.image
-    );
-
-    // if file exists, show it
-    if (fs.existsSync(pathImage)) {
-      return res.sendFile(pathImage);
-    }
+    return res.redirect(model.image);
   }
 
   const pathNotFound = path.join(__dirname, "../assets", "no-image.jpg");

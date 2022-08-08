@@ -50,9 +50,7 @@ const connectSocket = async () => {
     console.log("Sockets offline");
   });
 
-  socket.on("receive-messages", (payload) => {
-    console.log(payload);
-  });
+  socket.on("receive-messages", paintMessages);
 
   socket.on("active-users", paintUsers);
 
@@ -94,6 +92,23 @@ txtMessage.addEventListener("keyup", ({ keyCode }) => {
 
   txtMessage.value = "";
 });
+
+const paintMessages = (messages = []) => {
+  let messagesHTML = "";
+
+  messages.forEach(({ name, message }) => {
+    messagesHTML += `
+      <li>
+        <p>
+          <span class="text-primary"> ${name} </span>
+          <span> ${message} </span>
+        </p>
+      </li>
+      `;
+  });
+
+  ulMessages.innerHTML = messagesHTML;
+};
 
 const main = async () => {
   await validateJWT();

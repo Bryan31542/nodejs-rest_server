@@ -39,43 +39,30 @@
         <br />
         <a href="#" onclick="signOut();">Sign out</a>
       </div>
-      <div class="col-sm-6"></div>
+      <div class="col-sm-6">
+        <h1>Login</h1>
+        <hr />
+        <br />
+
+        <form class="d-grid">
+          <input
+            type="text"
+            name="email"
+            class="form-control mb-2"
+            placeholder="Email"
+          />
+          <input
+            type="text"
+            name="password"
+            class="form-control mb-2"
+            placeholder="Password"
+          />
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
     </div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-      function handleCredentialResponse(response) {
-        // Google Token : ID_TOKEN
-        const body = { id_token: response.credential };
-        var url = window.location.hostname.includes("localhost")
-          ? "http://localhost:8080/api/auth/google"
-          : "https://rest-server2.herokuapp.com/api/auth/google";
-
-        fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        })
-          .then((resp) => resp.json())
-          .then((resp) => {
-            console.log(resp);
-            localStorage.setItem("email", resp.user.email);
-          })
-          .catch(console.warn);
-      }
-
-      const signOut = () => {
-        console.log(google.accounts.id);
-        google.accounts.id.disableAutoSelect();
-        console.log("User signed out.");
-
-        google.accounts.id.revoke(localStorage.getItem("email"), (done) => {
-          localStorage.clear();
-          location.reload();
-        });
-      };
-    </script>
+    <script src="./js/auth.js"></script>
   </body>
 </html>

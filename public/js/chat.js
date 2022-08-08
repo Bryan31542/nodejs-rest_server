@@ -50,8 +50,8 @@ const connectSocket = async () => {
     console.log("Sockets offline");
   });
 
-  socket.on("receive-messages", () => {
-    // TODO
+  socket.on("receive-messages", (payload) => {
+    console.log(payload);
   });
 
   socket.on("active-users", paintUsers);
@@ -77,6 +77,23 @@ const paintUsers = (users = []) => {
 
   ulUsers.innerHTML = usersHTML;
 };
+
+txtMessage.addEventListener("keyup", ({ keyCode }) => {
+  const message = txtMessage.value;
+  const uid = txtUid.value;
+
+  if (keyCode !== 13) {
+    return;
+  }
+
+  if (message.length === 0) {
+    return;
+  }
+
+  socket.emit("send-message", { message, uid });
+
+  txtMessage.value = "";
+});
 
 const main = async () => {
   await validateJWT();

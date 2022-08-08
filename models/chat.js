@@ -6,6 +6,14 @@ class Message {
   }
 }
 
+class PrivateMessage {
+  constructor(from, to, message) {
+    this.from = from;
+    this.to = to;
+    this.message = message;
+  }
+}
+
 class ChatMessages {
   constructor() {
     this.messages = [];
@@ -23,6 +31,16 @@ class ChatMessages {
 
   sendMessage(uid, name, message) {
     this.messages.unshift(new Message(uid, name, message));
+  }
+
+  sendPrivateMessage(from, to, message) {
+    this.messages.unshift(new PrivateMessage(from, to, message));
+  }
+
+  getPrivateMessage(from, to) {
+    return this.messages.filter((message) => {
+      return message.from === from && message.to === to;
+    });
   }
 
   connectUser(user) {

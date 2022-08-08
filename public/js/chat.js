@@ -4,6 +4,7 @@ var url = window.location.hostname.includes("localhost")
 
 let user = null;
 let socket = null;
+let messagesArray = [];
 
 // HTMLs Refs
 const txtUid = document.querySelector("#txtUid");
@@ -11,6 +12,7 @@ const txtMessage = document.querySelector("#txtMessage");
 const ulUsers = document.querySelector("#ulUsers");
 const ulMessages = document.querySelector("#ulMessages");
 const btnOut = document.querySelector("#btnOut");
+const ulPrivate = document.querySelector("#ulPrivate");
 
 // Validate JWT in localStorage
 const validateJWT = async () => {
@@ -54,9 +56,7 @@ const connectSocket = async () => {
 
   socket.on("active-users", paintUsers);
 
-  socket.on("private-message", () => {
-    // TODO
-  });
+  socket.on("private-message", paintPrivateMessage);
 };
 
 const paintUsers = (users = []) => {
@@ -108,6 +108,25 @@ const paintMessages = (messages = []) => {
   });
 
   ulMessages.innerHTML = messagesHTML;
+};
+
+const paintPrivateMessage = (messages) => {
+  let messagesHTML = "";
+
+  messagesArray.unshift(messages);
+
+  messagesArray.forEach(({ from, message }) => {
+    messagesHTML += `
+      <li>
+        <p>
+          <span class="text-primary"> ${from} </span>
+          <span> ${message} </span>
+        </p>
+      </li>
+      `;
+  });
+
+  ulPrivate.innerHTML = messagesHTML;
 };
 
 const main = async () => {

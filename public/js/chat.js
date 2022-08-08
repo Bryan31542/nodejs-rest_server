@@ -54,13 +54,28 @@ const connectSocket = async () => {
     // TODO
   });
 
-  socket.on("active-users", (payload) => {
-    console.log(payload);
-  });
+  socket.on("active-users", paintUsers);
 
   socket.on("private-message", () => {
     // TODO
   });
+};
+
+const paintUsers = (users = []) => {
+  let usersHTML = "";
+
+  users.forEach(({ name, uid }) => {
+    usersHTML += `
+      <li>
+        <p>
+          <h5 class="text-success"> ${name} </h5>
+          <span class="fs-6 text-muted"> ${uid} </span>
+        </p>
+      </li>
+      `;
+  });
+
+  ulUsers.innerHTML = usersHTML;
 };
 
 const main = async () => {

@@ -1,11 +1,44 @@
+const myForm = document.querySelector("form");
+
+var url = window.location.hostname.includes("localhost")
+  ? "http://localhost:8080/api/auth/"
+  : "https://rest-server2.herokuapp.com/api/auth/";
+
+myForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const formData = {};
+
+  for (let element of myForm.elements) {
+    if (element.name.length > 0) {
+      formData[element.name] = element.value;
+    }
+  }
+
+  fetch(url + "login", {
+    method: "POST",
+    body: JSON.stringify(formData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((resp) => resp.json())
+    .then(({ msg, token }) => {
+      if (msg) {
+        return console.error(msg);
+      }
+      localStorage.setItem("token", token);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 function handleCredentialResponse(response) {
   // Google Token : ID_TOKEN
   const body = { id_token: response.credential };
-  var url = window.location.hostname.includes("localhost")
-    ? "http://localhost:8080/api/auth/google"
-    : "https://rest-server2.herokuapp.com/api/auth/google";
 
-  fetch(url, {
+  fetch(url + "google", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
